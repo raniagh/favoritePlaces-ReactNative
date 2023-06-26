@@ -1,17 +1,21 @@
-import { View, StyleSheet, Alert, Text } from "react-native";
+import { useState } from "react";
+import { View, StyleSheet, Alert, Text, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import {
   getCurrentPositionAsync,
   useForegroundPermissions,
   PermissionStatus,
 } from "expo-location";
+
 import OutlineButton from "../UI/OutlineButton";
 import { Colors } from "../../constants/colors";
-import { Image } from "react-native";
-import { useState } from "react";
 import { getMapPreview } from "../../util/location";
 
 function LocationPicker() {
   const [pickedLocation, setPickedLocation] = useState();
+
+  const navigation = useNavigation();
+
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
 
@@ -47,7 +51,9 @@ function LocationPicker() {
     });
   }
 
-  function pickOnMapHandler() {}
+  function pickOnMapHandler() {
+    navigation.navigate("Map");
+  }
 
   let locationPreview = <Text>No location picked yet.</Text>;
 
