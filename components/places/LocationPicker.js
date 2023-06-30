@@ -15,7 +15,7 @@ import OutlineButton from "../UI/OutlineButton";
 import { Colors } from "../../constants/colors";
 import { getMapPreview } from "../../util/location";
 
-function LocationPicker() {
+function LocationPicker({ onPickLocation }) {
   const [pickedLocation, setPickedLocation] = useState();
   //it takes true if the screen is focus
   const isFocused = useIsFocused();
@@ -32,6 +32,10 @@ function LocationPicker() {
       setPickedLocation(mapPickedLocation);
     }
   }, [route, isFocused]);
+
+  useEffect(() => {
+    onPickLocation(pickedLocation);
+  }, [pickedLocation, onPickLocation]);
 
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
