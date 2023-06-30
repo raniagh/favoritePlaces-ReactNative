@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
@@ -6,9 +7,24 @@ import AddPlace from "./screens/AddPlace";
 import IconButton from "./components/UI/IconButton";
 import { Colors } from "./constants/colors";
 import Map from "./screens/Map";
+import { init } from "./util/database";
+import AppLoading from "expo-app-loading";
 
 const Stack = createStackNavigator();
+
 export default function App() {
+  const [dbInitialised, setDbInitialised] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => setDbInitialised(true))
+      .catch((err) => console.log(err));
+  }, []);
+
+  if (!dbInitialised) {
+    return <AppLoading />;
+  }
+
   return (
     <>
       <StatusBar style="dark" />
