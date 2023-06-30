@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Alert, Text, Image } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import {
   getCurrentPositionAsync,
   useForegroundPermissions,
@@ -13,8 +17,21 @@ import { getMapPreview } from "../../util/location";
 
 function LocationPicker() {
   const [pickedLocation, setPickedLocation] = useState();
+  //it takes true if the screen is focus
+  const isFocused = useIsFocused();
 
   const navigation = useNavigation();
+  const route = useRoute();
+
+  useEffect(() => {
+    if (isFocused && route.params) {
+      const mapPickedLocation = {
+        lat: route.params.pickedLat,
+        lng: route.params.pickedLng,
+      };
+      setPickedLocation(mapPickedLocation);
+    }
+  }, [route, isFocused]);
 
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
@@ -75,7 +92,7 @@ function LocationPicker() {
           Locate User
         </OutlineButton>
         <OutlineButton icon="map" onPress={pickOnMapHandler}>
-          Pick on Map
+          Pick on map
         </OutlineButton>
       </View>
     </View>
